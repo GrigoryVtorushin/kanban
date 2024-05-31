@@ -1,6 +1,7 @@
 import {create} from "zustand";
 import {immer} from "zustand/middleware/immer";
 import {persist} from "zustand/middleware";
+import axios from "axios";
 
 export type Item = {
     id: number,
@@ -20,57 +21,69 @@ export interface tasksState{
     setShowCardModal: ( bool: boolean ) => void,
     taskData: Item,
     setTaskData: (data: Item) => void,
-
+    getLeads: () => void,
+    deleteLead: (id: string) => void,
+    deleteAllLeads: (status: string) => void,
+    updateLead: (id: string, status: string) => void,
+    createLead:(name: string, description: string) => void,
 }
 
-export const useTasks = create<tasksState>()(
-    persist(
-        immer((set, get) => ({
-            boards: [
-                {
-                    id: 1, 
-                    title: 'Новое', 
-                    items: [
-                        {id: 1, title: 'Здача 1', description: 'Lorem ipsum dolor sit amet, consectetur adipisicing.'}, 
-                        {id: 2, title: 'Здача 2', description: 'Lorem ipsum dolor sit amet, consectetur adipisicing.'}
-                    ]},
-                {
-                    id: 2, 
-                    title: 'В работе', 
-                    items: [
-                        {id: 3, title: 'Здача 3', description: 'Lorem ipsum dolor sit amet, consectetur adipisicing.'}
-                    ]},
-                {
-                    id: 3, 
-                    title: 'Отказ', 
-                    items: [
-                        {id: 4, title: 'Здача 4', description: 'Lorem ipsum dolor sit amet, consectetur adipisicing.'}, 
-                        {id: 6, title: 'Здача 6', description: 'Lorem ipsum dolor sit amet, consectetur adipisicing.'}
-                    ]},
-                {
-                    id: 4, 
-                    title: 'Завершено', 
-                    items: [
-                        {id: 5, title: 'Здача 5', description: 'Lorem ipsum dolor sit amet, consectetur adipisicing.'}, 
-                        {id: 7, title: 'Здача 7', description: 'Lorem ipsum dolor sit amet, consectetur adipisicing.'}, 
-                        {id: 8, title: 'Здача 8', description: 'Lorem ipsum dolor sit amet, consectetur adipisicing.'}
-                    ]
-                }
-            ],
-            setBoards: (b: Board[]) => set({boards: b}),
-            showCardModal: false,
-            setShowCardModal: ( bool ) => set ( {showCardModal: bool}),
-            taskData: {
-                id: 0,
-                title: '',
-                description: ''
-            },
-            setTaskData: (data) => set({taskData: data})
+export const useTasks = create<tasksState>()(persist(immer((set) => ({
+    boards: [],
+    setBoards: (b: Board[]) => set({boards: b}),
+    showCardModal: false,
+    setShowCardModal: ( bool ) => set ( {showCardModal: bool}),
+    taskData: {
+        id: 0,
+        title: '',
+        description: ''
+    },
+    setTaskData: (data) => set({taskData: data}),
 
-        })), 
-        {
-            name: 'tasksStore', 
-            version: 1
-        }
-    ) 
-);
+    getLeads: async () => {
+        await axios.post('https://d5dnebshjibq2cticp6u.apigw.yandexcloud.net/get-leads', {})
+            .then(response => {
+                console.log(response)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    },
+    deleteLead: async (id: string) => {
+        await axios.post('https://d5dnebshjibq2cticp6u.apigw.yandexcloud.net/delet-all', {
+            "id": id
+        })
+            .then(response => {
+                console.log(response)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    },
+    deleteAllLeads: async (status: string) => {
+        await axios.post('https://d5dnebshjibq2cticp6u.apigw.yandexcloud.net/delet-all', {
+            'status': status
+        }).then(response => {
+            console.log(response)
+        }).catch(error => console.log(error))
+    },
+    updateLead: async (id: string, status: string) => {
+        await axios.post('https://d5dnebshjibq2cticp6u.apigw.yandexcloud.net/update-lead', {
+            "id": id,
+            "status": status
+        }).then(response => {
+            console.log(response)
+        }).catch(error => console.log(error))
+    },
+    createLead: async (name: string, description: string) => {
+        await axios.post('https://d5dnebshjibq2cticp6u.apigw.yandexcloud.net/create', {
+            "name": name,
+            "description": description
+        }).then(response => {
+            console.log(response)
+        }).catch(error => {
+            console.log(error)
+        })
+    }
+
+})), {name: 'tasksStore', version: 1}));

@@ -5,7 +5,7 @@ import CardModal from "./CardModal";
 
 
 const KanbanBoard = () => {
-    const {boards, setBoards, showCardModal, setShowCardModal, taskData, setTaskData} = useTasks();
+    const {boards, setBoards, setShowCardModal, setTaskData} = useTasks();
 
     const [currentBoard, setCurrentBoard] = useState<Board>({} as Board);
     const [currentItem, setCurrentItem] = useState<Item>({} as Item);
@@ -25,7 +25,7 @@ const KanbanBoard = () => {
         e.currentTarget.style.boxShadow = 'none'
     }
 
-    function dragStartHandler(e: React.DragEvent<HTMLElement>, board: Board, item: Item){
+    function dragStartHandler(board: Board, item: Item){
         setCurrentBoard(board);
         setCurrentItem(item)
     }
@@ -93,7 +93,7 @@ const KanbanBoard = () => {
                         }}
                         onDragOver={(e: React.DragEvent<HTMLElement>) => dragOverHandler(e)}
                         onDragLeave={e => dragLeaveHandler(e)}
-                        onDragStart={(e) => dragStartHandler(e, board, item)}
+                        onDragStart={() => dragStartHandler(board, item)}
                         onDragEnd={(e) => dragEndHandler(e)}
                         onDrop={(e) => dropHandler(e, board, item)}
                     >

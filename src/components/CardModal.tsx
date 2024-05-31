@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
+
 import {useTasks} from "../store/store";
 import {Button, Modal} from "react-bootstrap";
 
 const CardModal = () => {
     const {showCardModal, setShowCardModal, taskData} = useTasks();
     const handleClose = () => setShowCardModal(false);
-    const handleShow = () => setShowCardModal(true);
+    // const handleShow = () => setShowCardModal(true);
 
     return (
         <div>
