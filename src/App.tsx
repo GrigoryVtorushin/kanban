@@ -1,14 +1,13 @@
-import React from 'react';
-import './App.css';
-import KanbanBoard from "./components/KanbanBoard";
+import KanbanBoard from './components/KanbanBoard';
+import './App.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-
 function App() {
-
   return (
-    <KanbanBoard/>
-  );
+    <>
+      <KanbanBoard />
+    </>
+  )
 }
 
-export default App;
+export default App
