@@ -3,7 +3,7 @@ import {useTasks} from "../store/store";
 import {Button, Modal} from "react-bootstrap";
 
 const CardModal = () => {
-    const {showCardModal, setShowCardModal, taskData} = useTasks();
+    const {showCardModal, setShowCardModal, taskData, deleteLead} = useTasks();
     const handleClose = () => setShowCardModal(false);
     // const handleShow = () => setShowCardModal(true);
 
@@ -11,13 +11,16 @@ const CardModal = () => {
         <div>
             <Modal show={showCardModal} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>{taskData.title}</Modal.Title>
+                    <Modal.Title>{taskData.name}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     {taskData.description}
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="danger" onClick={handleClose}>
+                    <Button variant="danger" onClick={() => {
+                        deleteLead(taskData.id);
+                        handleClose();
+                    }}>
                         Удалить задачу
                     </Button>
                 </Modal.Footer>
